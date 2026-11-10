@@ -1,19 +1,30 @@
 #include <QCoreApplication>
+#include <iostream>
+#include "Counter.h"
 
-int main(int argc, char *argv[])
+void printCounters(const Counter& c1, const Counter& c2) {
+    std::cout << "Counter 1: " << c1.getCount() << " | " << "Counter 2: " << c2.getCount() << '\n';
+}
+
+int main()
 {
-    QCoreApplication a(argc, argv);
 
-    // Set up code that uses the Qt event loop here.
-    // Call QCoreApplication::quit() or QCoreApplication::exit() to quit the application.
-    // A not very useful example would be including
-    // #include <QTimer>
-    // near the top of the file and calling
-    // QTimer::singleShot(5000, &a, &QCoreApplication::quit);
-    // which quits the application after 5 seconds.
+    Counter c1(5);
+    Counter c2(12);
 
-    // If you do not need a running Qt event loop, remove the call
-    // to QCoreApplication::exec() or use the Non-Qt Plain C++ Application template.
+    QObject::connect(&c1, &Counter::counterIncremented, &c2, &Counter::incrementCounter);
+    QObject::connect(&c2, &Counter::counterIncremented, &c1, &Counter::incrementCounter);
+    QObject::connect(&c1, &Counter::counterDecremented, &c2, &Counter::decrementCounter);
+    QObject::connect(&c2, &Counter::counterDecremented, &c1, &Counter::decrementCounter);
 
-    return QCoreApplication::exec();
+    c1.Increment();
+    printCounters(c1, c2);
+    c2.Increment();
+    printCounters(c1, c2);
+    c1.Decrement();
+    printCounters(c1, c2);
+    c2.Decrement();
+    printCounters(c1, c2);
+
+    return 0;
 }
