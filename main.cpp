@@ -1,8 +1,7 @@
-#include <QCoreApplication>
 #include <iostream>
 #include "Counter.h"
 
-void printCounters(const Counter& c1, const Counter& c2) {
+static void printCounters(const Counter& c1, const Counter& c2) {
     std::cout << "Counter 1: " << c1.getCount() << " | " << "Counter 2: " << c2.getCount() << '\n';
 }
 
